@@ -222,7 +222,15 @@ dashboard.layout = dhc.Div(
 def update_charts(test_group,xaxis,yaxis, start_date, end_date):
 
     if (test_group != "v"):
-        overall_metrics = calculate_metrics(dataframes[test_group],xaxis)
+        data = dataframes[test_group]
+        mask = (
+                (data["Transaction Date"] >= start_date)
+                & (data["Transaction Date"] <= end_date)
+            )
+        filtered_data = data.loc[mask, :]
+        
+        overall_metrics = calculate_metrics(filtered_data,xaxis)
+        
         fig = px.scatter(x=overall_metrics[xaxis],
                      y=overall_metrics[yaxis]
         )
@@ -237,9 +245,26 @@ def update_charts(test_group,xaxis,yaxis, start_date, end_date):
         return fig
 
     else:
-        A_metrics = calculate_metrics(A_df,xaxis)
+        data_A = A_df
+        data_B = B_df
+        mask = (
+                (data_A["Transaction Date"] >= start_date)
+                & (data_A["Transaction Date"] <= end_date)
+            )
+        
+        filtered_data_A = data_A.loc[mask, :]
 
-        B_metrics = calculate_metrics(B_df,xaxis)
+        mask =(
+        (data_B["Transaction Date"] >= start_date)
+        & (data_B["Transaction Date"] <= end_date)
+        )
+        
+        filtered_data_B = data_B.loc[mask, :]
+
+
+        A_metrics = calculate_metrics(filtered_data_A,xaxis)
+
+        B_metrics = calculate_metrics(filtered_data_B,xaxis)
 
         fig = make_subplots(rows=1, cols=1)
 
@@ -287,12 +312,6 @@ def update_metrics(test_group, start_date, end_date):
 
         gross_profit= filtered_data_A['Profit'].sum()-filtered_data_A['Tax'].sum()
 
-        
-        mask = (
-                (data_B["Transaction Date"] >= start_date)
-                & (data_B["Transaction Date"] <= end_date)
-            )
-
 
         row_A = [
                 dbc.Col(build_card("A Conversion",commas(round(conversion,3))),width=3),
@@ -300,7 +319,12 @@ def update_metrics(test_group, start_date, end_date):
                 dbc.Col(build_card("A Net Profit",commas(round(net_profit,2))),width=3),
                 dbc.Col(build_card("A Gross Profit",commas(round(gross_profit,2))),width=3)
                 ]
-                
+
+
+        mask = (
+        (data_B["Transaction Date"] >= start_date)
+        & (data_B["Transaction Date"] <= end_date)
+        )
         
         filtered_data_B = data_B.loc[mask, :]
 
