@@ -82,7 +82,7 @@ dashboard = dash.Dash(__name__,external_stylesheets=external_stylesheets)
 
 server = dashboard.server
 
-dashboard.title = "Hastings Direct"
+dashboard.title = "Insurance Dashboard Castestudy"
 
 
 
@@ -100,7 +100,6 @@ dashboard.layout = dhc.Div(
                 children=[
                     dhc.Div(
                         children=[
-                            
                             dhc.Div(children="Test Group", className="menu-title"),
                             dcc.Dropdown(
                                 id="group-selector",
@@ -113,8 +112,7 @@ dashboard.layout = dhc.Div(
                                 value="A",
                                 clearable=False,
                                 searchable=False,
-                                
-
+                                className="dropdown"
                             ),
                         ]
                     ),
@@ -158,7 +156,8 @@ dashboard.layout = dhc.Div(
                                     options=[{'label': i, 'value': i} for i in metric_list_x],
                                     value='Customer Age',
                                     clearable=False,
-                                    searchable=False
+                                    searchable=False,
+                                    className="dropdown"
                                 ),
                         ]
                     ),
@@ -173,7 +172,8 @@ dashboard.layout = dhc.Div(
                                 options=[{'label': i, 'value': i} for i in metric_list_y],
                                 value='Conversion',
                                 clearable=False,
-                                searchable=False
+                                searchable=False,
+                                className="dropdown"
                             ),
                         ]
                     ),
