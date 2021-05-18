@@ -231,7 +231,7 @@ def update_charts(test_group,xaxis,yaxis, start_date, end_date):
         
         overall_metrics = calculate_metrics(filtered_data,xaxis)
         
-        fig = px.scatter(x=overall_metrics[xaxis],
+        fig = px.line(x=overall_metrics[xaxis],
                      y=overall_metrics[yaxis]
         )
 
