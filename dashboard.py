@@ -12,6 +12,8 @@ import math
 
 df = pd.read_csv("Data.csv")
 df = df.dropna()
+df.drop(df[df['Credit Score'] > 1000 ].index , inplace=True)
+
 df['Credit Score'] = df['Credit Score'].apply(lambda x: (int(math.ceil(x / 10.0)) * 10))
 df['Licence Length'] = df['Licence Length'].apply(lambda x: (round(x * 2) / 2))
 
@@ -56,6 +58,8 @@ def calculate_metrics(data,metric):
     df2['Gross Profit'] = [sum(data['Tax'].loc[data[metric] == z[metric]])
         for _, z in df2.iterrows()]
 
+    df2['Gross Profit'] = df2['Net Profit']-df2['Gross Profit']
+
     df2['Total Price'] = [sum(data['Total Price'].loc[data[metric] == w[metric]])
         for _, w in df2.iterrows()]
 
@@ -75,6 +79,8 @@ def build_card(title, data):
     )
 
 
+def commas(number):
+    return ("{:,}".format(number))
 
 
 
@@ -95,8 +101,8 @@ dashboard.layout = dhc.Div(
                     ],
                 className="header",
             ),
+         
             dhc.Div(
-            dbc.Row(
                 children=[
                     dhc.Div(
                         children=[
@@ -111,8 +117,7 @@ dashboard.layout = dhc.Div(
                                     ],
                                 value="A",
                                 clearable=False,
-                                searchable=False,
-                                className="dropdown"
+                                searchable=False
                             ),
                         ]
                     ),
@@ -133,7 +138,7 @@ dashboard.layout = dhc.Div(
                     ),
                 ],
                 className="menu",
-                )
+                
             ),
 
          
@@ -157,9 +162,9 @@ dashboard.layout = dhc.Div(
                                     value='Customer Age',
                                     clearable=False,
                                     searchable=False,
-                                    className="dropdown"
+                                    
                                 ),
-                        ]
+                        ],
                     ),
                     dhc.Div(
                         children=[
@@ -173,13 +178,14 @@ dashboard.layout = dhc.Div(
                                 value='Conversion',
                                 clearable=False,
                                 searchable=False,
-                                className="dropdown"
+                                
+                                
                             ),
-                        ]
+                        ],
                     ),
                       
                 ],
-                className="menu"
+                
                 )
             ]),
 
@@ -194,6 +200,7 @@ dashboard.layout = dhc.Div(
             ],
             className="wrapper",
         ),
+         
            
               
         ]
@@ -288,10 +295,10 @@ def update_metrics(test_group, start_date, end_date):
 
 
         row_A = [
-                dbc.Col(build_card("A Conversion",round(conversion,3)),width=3),
-                dbc.Col(build_card("A Total Price",round(total_price,2)),width=3),
-                dbc.Col(build_card("A Net Profit",round(net_profit,2)),width=3),
-                dbc.Col(build_card("A Gross Profit",round(gross_profit,2)),width=3)
+                dbc.Col(build_card("A Conversion",commas(round(conversion,3))),width=3),
+                dbc.Col(build_card("A Total Price",commas(round(total_price,2))),width=3),
+                dbc.Col(build_card("A Net Profit",commas(round(net_profit,2))),width=3),
+                dbc.Col(build_card("A Gross Profit",commas(round(gross_profit,2))),width=3)
                 ]
                 
         
@@ -306,10 +313,10 @@ def update_metrics(test_group, start_date, end_date):
         gross_profit= filtered_data_B['Profit'].sum()-filtered_data_B['Tax'].sum()
 
         row_B = [
-                dbc.Col(build_card("B Conversion",round(conversion,3)),width=3),
-                dbc.Col(build_card("B Total Price",round(total_price,2)),width=3),
-                dbc.Col(build_card("B Net Profit",round(net_profit,2)),width=3),
-                dbc.Col(build_card("B Gross Profit",round(gross_profit,2)),width=3)
+                dbc.Col(build_card("B Conversion",commas(round(conversion,3))),width=3),
+                dbc.Col(build_card("B Total Price",commas(round(total_price,2))),width=3),
+                dbc.Col(build_card("B Net Profit",commas(round(net_profit,2))),width=3),
+                dbc.Col(build_card("B Gross Profit",commas(round(gross_profit,2))),width=3)
 ]
             
 
@@ -335,10 +342,10 @@ def update_metrics(test_group, start_date, end_date):
         gross_profit= filtered_data['Profit'].sum()-filtered_data['Tax'].sum()
 
         row_A = [
-            dbc.Col(build_card("Conversion",round(conversion,3)),width=2),
-            dbc.Col(build_card("Total Price",round(total_price,2)),width=2),
-            dbc.Col(build_card("Net Profit",round(net_profit,2)),width=2),
-            dbc.Col(build_card("Gross Profit",round(gross_profit,2)),width=2)
+            dbc.Col(build_card("Conversion",commas(round(conversion,3))),width=3),
+            dbc.Col(build_card("Total Price",commas(round(total_price,2))),width=3),
+            dbc.Col(build_card("Net Profit",commas(round(net_profit,2))),width=3),
+            dbc.Col(build_card("Gross Profit",commas(round(gross_profit,2))),width=3)
         ]
         
         
