@@ -350,6 +350,7 @@ def update_metrics(test_group, start_date, end_date):
         
         
 
+
         return row_A
         
 
