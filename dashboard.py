@@ -80,7 +80,7 @@ def build_card(title, data):
 
 dashboard = dash.Dash(__name__,external_stylesheets=external_stylesheets)
 
-server = app.server
+server = dashboard.server
 
 dashboard.title = "Hastings Direct"
 
